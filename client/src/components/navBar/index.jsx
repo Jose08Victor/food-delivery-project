@@ -1,32 +1,37 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { assets } from "../../assets/assets"
 import "./styles.css"
+import { Link } from "react-router-dom"
+import { StoreContext } from "../../context/storeContext"
 
-export const NavBar = () => {
+export const NavBar = ({ setShowLogin }) => {
     const [menu, setMenu] = useState("home");
+
+    const { getTotalCartAmount } = useContext(StoreContext);
 
     return (
         <div className="navbar">
-            <img src={assets.logo} alt="Logo" className="logo" />
+            <Link to="/"><img src={assets.logo} alt="Logo" className="logo" /></Link>
 
             <ul className="navbar-menu">
-                <li onClick={() => setMenu("home")} className={menu === "home" ? "active" : ""}>home</li>
+                <Link to={'/'} onClick={() => setMenu("home")} className={menu === "home" ? "active" : ""}>home</Link>
 
-                <li onClick={() => setMenu("menu")} className={menu === "menu" ? "active" : ""}>menu</li>
+                <a href="#explore-menu" onClick={() => setMenu("menu")} className={menu === "menu" ? "active" : ""}>menu</a>
 
-                <li onClick={() => setMenu("mobile-app")} className={menu === "mobile-app" ? "active" : ""}>mobile-app</li>
+                <a href="#app-download" onClick={() => setMenu("mobile-app")} className={menu === "mobile-app" ? "active" : ""}>mobile-app</a>
 
-                <li onClick={() => setMenu("contact-us")} className={menu === "contact-us" ? "active" : ""}>contact us</li>
+                <a href="#footer" onClick={() => setMenu("contact-us")} className={menu === "contact-us" ? "active" : ""}>contact us</a>
             </ul>
 
             <div className="navbar-right">
                 <img src={assets.search_icon} alt="Search Icon" />
                 <div className="navbar-search-icon">
-                    <img src={assets.basket_icon} alt="Basket Icon" />
-                    <div className="dot"></div>
+                    <Link to="/cart"><img src={assets.basket_icon} alt="Basket Icon" /></Link>
+
+                    <div className={getTotalCartAmount() === 0 ? "" : "dot"}></div>
                 </div>
 
-                <button>sign in</button>
+                <button onClick={() => setShowLogin(true)} >sign in</button>
             </div>
         </div>
     )
